@@ -1,0 +1,24 @@
+Chap 12 Making class objects act like values
+
+a class that needs no destructor doesn't need an explicit copy constructor or assignment operator either
+
+User-defined conversions say how to transform to and from objects of class type As withbuilt-in conversions, the compiler will apply user-defined conversions to convert a value into the type that is needed.
+
+For a binary operation, the left operand is always bound to the first parameter, and the right operand is bound to the second. In the case of member operator functions, the first parameter (the left operand) is always the one that is passed implicitly to the member function.  the input—and, by analogy, the output—operator must be a nonmember.
+
+If a class supports conversions, then it is usually good practice to define binary operators as nonmember functions. By doing so, we preserve symmetry between the operands.
+
+If an operator is a member of a class, then that operator's left operand cannot be the result of an automatic conversion.
+
+all of the compound- assignment operators should be members of the class.
+
+it is useful to make explicit the constructors that define the structure of the object being constructed, rather than its contents. Those constructors whose arguments become part of the object usually should not be explicit.
+
+if The constructor argument determines the structure of the object, but not its value, it should be explicit
+
+Class authors can also define explicit conversion operators, which say how to convert an object from its type to a target type. Conversion operators must be defined as members of a class. The name of a conversion operator is operator followed by the target type name.
+
+the void type could be used only in a few ways—the basis for a pointer being one of them. A pointer to void is sometimes called a universal pointer, because it is a pointer that can point to any type of object.
+
+one thing that can be done with a void* is to convert it to bool
+

@@ -1,0 +1,27 @@
+14-0. Compile, execute, and test the programs in this chapter.
+    
+    See the unholy amount of files in this folder: grading.cpp Handle.h Core.h Core_help.h letter_grade_array.h/.cpp Str.h Vec.h
+
+14-1. Implement the comparison operation that operates on Ptr<Core> .
+    
+    see compare_Core_pointers in ./grading.cpp.  Altered Student_info class in Core.h to have a Ptr<Core> private member.  changed all instances if Handle to Ptr in grading.cpp
+
+14-2. Implement and test the student grading program using Ptr<Core> objects.
+
+    see 14-1
+
+14-3. Implement the Student_info class to use the final version of Ptr , and use that version to implement the grading program from §13.5/247.
+
+    see 14-1
+
+14-4. Reimplement the Str class to use the final version of Ptr .
+
+    it already does. had to alter the operator>> to use pointer-like imlementation.  
+    
+14-5. Test the reimplemented Str class by recompiling and rerunning programs that use Str, such as the version of split and the picture operations that use a Vec<Str> .
+
+        
+
+14-6. The Ptr class really solves two problems: maintaining reference counts, and allocating and deallocating objects. Define a class that does reference counting and nothing else; then use that class to reimplement the Ptr class.
+
+    

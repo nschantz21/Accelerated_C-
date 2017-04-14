@@ -1,0 +1,60 @@
+Chap 14: Managing memory (almost) Automatically
+
+      In chap 13 the Student_info handle class handled the memory allocation AND was the interface for the operations on student records. Combining two independent abstractions into a single class is often a sign of weak design.
+      What we want to do is make one class only be the interface and make another pointer-like class that handles the implementation and handles memory allocation.  That way we can have multiple interface classes with a single pointer-like class.  This also helps in managing memory by assigning multiple pointer-like classes to a single underlying object, avoiding copying objetcs unnecessarily.
+      
+14.1 Handles that copy their objects
+    
+    Programming with pointers is notoriously error prone:
+        Copying a pointer does not copy the corresponding object, leading to surprises if two pointers inadvertently point to the same object.
+        Destroying a pointer does not destroy its object, leading to memory leaks.
+        Deleting an object without destroying a pointer to it leads to a dangling pointer, which causes undefined behavior if the program uses the pointer.
+        Creating a pointer without initializing it leaves the pointer unbound, which also causes undefined behavior if the program uses it.
+    That is why we use a handle class rather than code directly with the pointers - becasue it's a bitch.
+
+14.1.1 A generic Handle class
+
+    Handle class must be a template to be independent of the type of object it manages.
+    Generic Handle class properties:
+        A Handle is a value that refers to an object.
+        We can copy a Handle object.
+        We can test a Handle object to determine whether it is bound to another object.
+        We can use a Handle to trigger polymorphic behavior when it points to an object of a class that belongs to an inheritance hierarchy - if we call a virtual function through our class, we want the implementation to choose the function to run dynamically, just as if we'd called the function through a real pointer.
+    
+    defining operator->() and operator*() results in dynamic binding because we are calling virtual member functions of the underlying object through pointers and refernces without having to qualify the member function with the class scope.
+
+14.1.2 Using a generic handle
+
+    rewrote the grading program from the last chapter using Handle.
+    
+14.2 Reference-counted handles
+
+    At this point our handle class always copies the object which it handles when using the copy constructor or the assignment operator/constructor.  We want to decide if it copies or shares the underlying info. 
+    if we want a Handle that doesn't affect the underlying data, we don't want it to make a copy of the object. This way we can have multiple Handles pointing to the same object (since they won't affect it). But we still need to free the object at some point. So we count the references to the underlying object and delete it when there are no more references (and safe to destroy).
+    To add reference counting to a class, we have to allocate a counter, and change the operations that create, copy, and destroy the objects so that they update the counter appropriately.
+    This is essentially a const reference.
+
+14.3 Handles that let you decide when to share data
+
+    Our Ptr class will copy the object if we are about to change its contents, but only if there is another handle attached to the same object.  the reference count gives us a way to tell whether our handle is the only one attached to its object.  our new Ptr class uses the reference counter to call the underlying object's clone function to make a new copy if the Ptr is not the only pointer.  
+    
+14.4 An improvement on controllable handles
+
+    recreated the Str class with Ptr class in ./Str.h - any time you want to modify the underlying object, you need to call make unique, which makes a copy of the object.
+    
+14.4.1 Copying types that we can't control
+
+    for our make_unique function to work (and by extension the Ptr class), the undelying object's class need to have a virtual member function "clone". 
+    the fundamental theorem of software engineering: All problems can be solved by introducing an extra level of indirection
+    
+    The problem is that we are trying to call a member function that does not exist, and we have no way to cause the member function to exist. The solution, then, is not to call the member function directly but to define an intermediary global function that we can both call and create.
+    
+    The use of template<> at the beginning of this function indicates that the function is a template specialization.  specializations define a particular version of a template function for the specific argument type.  Our specialization for Vec<char> doesn't offer virtual behavior, but it doesn't have any Derived classes so it doesn't matter.
+    
+14.4.2 When is a copy necessary?
+    
+    when you are going to alter the underyling object. Even if it's just a part of the object - like a single character of a string - you should copy it, so the other pointers aren't changed as well.
+    
+Details:
+
+Nothing really here. just that templates and template specializations are really useful

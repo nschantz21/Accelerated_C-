@@ -1,0 +1,41 @@
+Quastions and Answers:
+
+11-0. Compile, execute, and test the programs in this chapter.
+    
+    A: See Vec_test.cpp
+
+11-1. The Student_info structure that we defined in Chapter 9 did not define a copy constructor, assignment operator, or destructor. Why not?
+
+   A:  All the data members of Student_info are standard data types and have built in constructors/destructors.  When you call Copy, assignment, or destruct Student_info, or one of its members, the compiler implements the standard data type function.
+
+11-2. That structure did define a default constructor. Why?
+    
+    A:  it defaulted the numbers to zero, because if you did not set up default constructors, then it would fill the initialized space with whatever random junk was in the memory at the time.  This can lead to computation errors.
+    
+11-3. What does the synthesized assignment operator for Student_info objects do?
+    
+    A:  The synthesized operations are defined recursively: Each synthesized operator recursively applies the appropriate operation for the data members of the class.
+    
+11-4. How many members does the synthesized Student_info destructor destroy?
+    
+    A:  the default destructor will be used. That destructor will destroy the pointer, but destroying a pointer does not free the space to which it points. The result will be a memory leak: The space consumed by Student_info will never be reclaimed.  So maybe it doesn't destroy any? or maybe it works recursively and destroys the members.  So all the members if that is the case, but perhaps not the container itself.
+    
+11-5. Instrument the Student_info class to count how often objects are created, copied, assigned, and destroyed. Use this instrumented class to execute the student record programs from Chapter 6. Using the instrumented Student_info class will let you see how many copies the library algorithms are doing. Comparing the number of copies will let you estimate what proportion of the cost differences we saw are accounted for by the use of each library class. Do this instrumentation and analysis.
+
+    A:  see ./11-5/main.cpp You can use the make file in the folder. I used a modified Curiously Recurring Template Pattern to count the occurances
+    
+11-6. Add an operation to remove an element from a Vec and another to empty the entire Vec. These should behave analogously to the erase and clear operations on vectors.
+
+    A: see ./Vec11-6.h the erase and clear member functions accomplish these goals
+    
+11-7. Once you've added erase and clear to Vec, you can use that class instead of vector in most of the earlier programs in this book. Rewrite the Student_info programs from Chapter 9 and the programs that work with character pictures from Chapter 5 to use Vecs instead of vectors.
+
+    A: see ./11-7/student and ./11-7/framing  I used the original version of the frame program using size_type instead of iterators because the Vec container handles it better, and I couldn't figure out how to use it with iterators in the frame program.
+    
+11-8. Write a simplified version of the standard list class and its associated iterator.
+
+    A: see ./11-8/List_test_2.cpp  I took the author's version and annoted it.  It implements recursive functions to immitate the std::list iterators.
+
+11-9. The grow function in §11.5.1/208 doubles the amount of memory each time it needs more. Estimate the efficiency gains of this strategy. Once you've predicted how much of a difference it makes, change the grow function appropriately and measure the difference.
+
+    A: see ./11-9 strangely allocating space for each new element is faster than allocating more space than needed.  This is probably because accessing the memory library is faster than creating uninitialized memory.

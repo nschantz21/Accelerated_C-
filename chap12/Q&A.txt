@@ -1,0 +1,66 @@
+Chap 12 exercises
+
+12-0. Compile, execute, and test the programs in this chapter.
+    
+    A:  See ./Str_test.cpp  had to add reference and const_reference typedefs and back_inserter template to Vec class.
+
+12-1. Reimplement the Str class, but choose an implementation strategy that requires that the class manage the storage itself. For example, you might store an array of char and a length. Consider what implications this change in design has for copy control. Also consider the cost of using Vec, (e.g., in storage overhead).
+
+    A:  see ./12-01/Str_test.cpp uses modified Str.h and Str.cpp. The new Str class doesn't rely on Vec.h to manage storage(dynamic memory allocation).  I couldn't figure it out. looked at the solution. it wasn't too complicated, but it's long.  The version that utilizes the Vec is faster. He ended up calling <vector> anyways and a bunch of other namespaces. So, it would probably be faster if you didn't call a bunch of STL namespaces, but ain't nobody got time for that.  some of the operators could probably use generic templates as well.  he overloaded operator+ for (char*, Str&) and (Str&, char*)... stupid.
+    
+12-2. Implement the c_str, data, and copy functions.
+
+    A:  see ./02/Str.h these are member functions of the std::string and are equivalenvt. http://en.cppreference.com/w/cpp/string/basic_string/c_str - Returns a pointer to a null-terminated character array with data equivalent to those stored in the string.  The copy member function pretty much just calls to the std::copy function.
+    
+12-3. Define the relational operators for Str . In doing so, you will want to know that the <cstring> header defines a function called strcmp , which compares two character pointers. The function returns a negative integer if the null-terminated character array denoted by the first pointer is less than the second, zero if the two strings are equal, or a positive value if the first string is greater than the second.
+
+    A:  see./03/Str.h... they all had to be member functions.  uses strcmp() function.  Also added begin member function to Str class- it calls the Vec member function begin().
+    
+12-4. Define the equality and inequality operators for Str
+
+    A:  see ./03/Str.h I made them at the same time as the relational operators
+    
+12-5. Implement concatenation for Str so as not to rely on conversions from const char*
+
+    A:  Added Str& + char& and char& + Str& operators to Str class.  They have to be friend functions because they access the underlying Vec<char> functions and modify the Str.  added end() function in Str to access the equivalent Vec funcitons
+    
+    
+12-6. Give Str an operation that will let us implicitly use a Str object as a condition. The test should fail if the Str is empty, and should succeed otherwise.
+
+    A:  see ./06/Str_test.cpp... Added operator void*() that checks for size and returns a null pointer if it's empty and a nonnull pointer if it's not.  also added operator!() to do the opposite. tests various status flags to determine whether the istream is valid, and returns either 0 or an implementation-defined nonzero void* value to indicate the state of the stream.  see chapter 12.5 in the book
+    
+12-7. The standard string class provides random-access iterators to manipulate the string 's characters. Add iterators and the iterator operations begin and end to your Str class
+    
+    A:  see ./06/Str.h I added those functions in for exercise 12-05
+    
+12-8. Add the getline function to the Str class
+
+    A:  modified the operator>> function to have a variable delimiter rather than just whitespace, although whitespace is the default.  also doesn't clear the Str object, just uses the Vec push_back function.
+    
+12-9. Use class ostream_iterator to reimplement the Str output operator. Why didn't we ask you to reimplement the input operator using class istream_iterator ?
+
+    A:  added std::ostream_iterator<char> to Str.h operator>> .  Didn't ask for istream_iterator because it wouldn't really improve efficiency.  it might not copy the null pointer.  It porbably isn't defined for a Str object either.  I'm not sure if I could just use the <char> template.
+    
+12-10. Having seen in §12.1/212 how Str defined a constructor that takes a pair of iterators, we can imagine that such a constructor would be useful in class Vec . Add this constructor to Vec , and reimplement Str to use the Vec constructor instead of calling copy
+
+    A:  see./10/Str.h and Vec.h  I invoked the create function(which takes iterators) in the Vec class and then just referenced that function in the Str class.
+    
+12-11. If you add the operations listed in these exercises, then you can use this Str class in all the examples in this book. Reimplement the operations on character pictures from Chapter 5 and the split functions from §5.6/87 and §6.1.1/103.
+
+    A:  fuck this. I added the substr member function and updated the getline to act like the std::getline function.  no longer a member function.
+    
+12-12. Define the insert function that takes two iterators for the Vec and Str classes.
+
+    A:  see ./Str_test.cpp thank you God. that took forever.  pretty much copied the grow function in the Str class but added a line to uninitialized_copy the iterator range (mimics the vector::insert function)
+
+12-13. Provide an assign function that could be used to assign the values in an array to a Vec
+
+    A:  see ./13/Str.h I just added it to the class.  sets up a template for iterators.  mostly it's just an added overload of the create member funciton that takes template iterators.
+    
+12-14. Write a program to initialize a Vec from a string 
+
+    A:  see ./13/Vec.h uses the same template as assign, although I also added an explicit constructor for std::string class that's a bit juvenile.
+    
+12-15. The read_hw function from §4.1.3/57 checked the stream from which it read to determine whether the function had hit end-of-file, or had encountered an invalid input. Our Str input operator does no such check. Why? Will it leave the stream in an invalid state?
+
+    A:  istream::get() does the work for us; get() stopping either as soon as such an insertion fails.  The function also stops extracting characters if the end-of-file is reached. If this is reached prematurely (before meeting the conditions described above), the function sets the eofbit flag. and the istream::unget() function gets rid of the end of file or invalid input.  http://www.cplusplus.com/reference/istream/istream/get/
