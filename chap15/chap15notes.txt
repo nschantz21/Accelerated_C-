@@ -1,0 +1,35 @@
+Chapter 15: Revisiting character pictures
+    this is going to deal a lot with inheritance and our genric Handle class
+
+15.1 Design
+
+    the Character Picture programs have two problems. The design doesn't have any structural info about how the pic was made.  The vector<string> implementation makes too many copies.  We'll use the Ptr class for implementation and reduce copies.  Design: we want to differentiate between frame, vcat, and hcat functions.
+
+15.1.1 Using inheritance to model the structure
+
+    because these picture objects are similar, but different, we want to use inheritance.  We can define a common base class that models the common properties of every kind of picture, and then derive from that base class a separate class for each specific kind of picture that we want to support.
+    By relating classes through inheritance, we can use virtual functions to write code that doesn't always need to know the precise kind of picture on which it is operating.
+    We don't need to make the inheritance visible to user because the operations do not deal with specific kinds of classes.
+    So we need three types of classes: the interface class, the base class, and the derived classes
+    Since we want to rely on the Ptr class to handle all the memory, and we want to hide our base/derived classes behind an interface class, we will use protection mechanisms.  By giving these classes an empty public interface, we can let the compiler enforce our decision that all interactions with our pictures will be through the interaction class.
+    If the object classes do not affect the state of the implementation class, then there's no reason to make their operations members of the implementation class. in fact we should not, because as nonmemebers they can allow conversions.
+    Remember that conversions are not applied to the left operand of the class::operator.()
+
+15.1.2 The Pic_base class
+
+    We need to implement a virtual function in the base class that may affect a derived class, such as an output operator. in the base class, typedef the underlying objects attributes if you need them, such as size_type.  Setting the virtual functions to 0, we are saying there will be no other definition of these virtual functions.  We do this because the base class is never acted upon and thus never needs to have values.  
+    Instead of forcing us to concoct an arbitrary definition for these operations, the C++ language lets us say that there will be no definition for a given virtual function.  As a side effect of declining to implement the virtual function, we also promise that there will never be objects of the associated type. There may still be objects of types derived from this type, but there are no objects of its exact type.
+    The way that we specify that we don't intend to implement a virtual function is to say = 0. Doing so makes it a pure virtual function. By giving a class even a single pure virtual function, we are also implicitly specifying that there will never be objects of that class. Such classes are called abstract base classes, because they exist only to capture an abstract interface for an inheritance hierarchy. They are purely abstract: There are no objects of the base class itself. Once we give a class any pure virtual s, the compiler will enforce our design by preventing us from creating any objects of an abstract class.
+
+15.1.3 The derived classes
+
+    the fact that a function is a pure virtual is inherited. If a derived class defines all of its inherited pure virtual functions, it becomes a concrete class, and we can create objects of that class.  
+    We are going to store a pointer to the base class in the interface class.  The derived classes are going to store interface class objects, but pretty much only for the base class pointer.  This way we can act upon/store interface class with our derived classes without reimplementing the base calss functions in the interface class.
+
+15.1.4 Copy control
+
+    we didn't make any copy constructors, assignment oerators, or destructors because the synthesized versions work.  Because we implemented everything using a Ptr or vector class, those classes' members will take care of the constructors, assignment, and destructors.
+
+15.2 Implementation
+
+    
