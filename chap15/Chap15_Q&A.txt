@@ -1,0 +1,36 @@
+Exercises
+15-0. Compile, execute, and test the programs in this chapter.
+
+    See Pic.h Pic.cpp and main_test.cpp
+    Unfortunately I could not get these to work in different files. had to consolidate all the derived classes and interface to a single file with the base class.
+
+15-1. Test your system by writing a program that executes
+    Picture p = // some initial starting picture
+    Picture q = frame(p);
+    Picture r = hcat(p, q) ;
+    Picture s = vcat(q, r);
+    cout << frame(hcat(s, vcat(r, q))) << endl;
+
+        see main_test.cpp
+
+15-2. Reimplement the Frame_Pic class so that the frame uses three different characters: one for the corners, another for the top and bottom borders, and a third for the side borders.
+
+    Altered the characters used in the Frame_Pic display function
+    
+15-3. Give users the option to specify what characters to use for these border characters.
+    
+    added character members to the Fram_Pic class that store the border and explicit constructor that sets those members.
+
+15-4. Add an operation to reframe a Picture, which changes the frame characters. The operation should change all of the frames in the interior picture.
+
+    reframe method added to Pic_base et al... Picture class added to Pic_base as friend class.
+
+15-5. Reimplement HCat_Pic so that when pictures of a different size are concatenated, the shorter one is centered in the space consumed by the longer one. That is, if we horizontally concatenate two pictures, one of which is four lines long and the other is two lines long, the first and last rows of the output picture will be blank on the side of the shorter picture. What can we now conclude about the necessity of the tests between row and 0.
+
+    I couldn't get this one.  something to remember though: size_type of object is an integer and can be divided by 2 no matter what to get the median.
+    modified the HCat_Pic::display method to add pre-buffer when sides are not equal.
+
+15-6. The Vec and str classes that we developed in Chapters 11 and 12 are powerful enough to be used to implement Pictures. Reimplement the material in this chapter to use Vec<str> instead of vector<string>, and test your implementation.
+
+16-1. Write a self-reproducing program. Such a program is one that does no input, and that, when run, writes a copy of its own source text on the standard output stream.
+

@@ -32,4 +32,37 @@ Chapter 15: Revisiting character pictures
 
 15.2 Implementation
 
+    the interface class makes the derived classes using the Base class (which is stored as a pointer in the interface class). If the derived class constructor is private (which all of ours are), then you have to add the interface class to the derived as a friend.
+    Because our constructor functions have the interface object as the parameter, we need to define an interface object constructor that takes a base object pointer as an argument.  That way we can pass the interface class pointers to the derived as well.
     
+15.2.2 The String_Pic class
+
+    added the width and display functions to the class header.
+    
+15.2.3 Padding the output
+
+    functions used by all derived classes can be defined in the the Base protected section.
+    Even if the Base is abstract, each derived contains a base-class part. A base-class function will execute on the base-class portion of a derived object.  Abstract classes may define data members, and (ordinary) member functions, as well as static ones.
+    By making a class function a static member, we allow for the fact that other abstractions in our program might have utilize a similar function, both in name and concept.  As long as each class defines what the static function means only in the context of the class, these mutually independent notions can coexist within our program.
+    
+15.2.4 The VCat_Pic class
+
+    implement the class
+    
+15.2.5 The HCat_Pic class
+
+    nothing to add
+
+15.2.6 The Frame_Pic class
+
+    nothing to add
+    
+15.2.7 Don't forget friends
+
+    A member of a Derived classes can access protected members of the base-class parts of objects of its own class, or of its own class, or of other classes derived from it (second generation), but it cannot access the protected members of base-class objects that stand alone- that is, that are not part of a derived-class object.
+    This is important when using dynamic binding and virtual functions because to the compiler, the pointers, through which we are accessing all the info, are for base-class objects.  Therefore they appear to be stand-alone base-class objects and the derived class objects will not be able to access their protected members.
+    If the language granted derived objects access to the protected members of a base-class object, then it would be trivial to subvert the protection mechanisms. If we needed access to a protected member of a class, we could define a new class that inherited from the class that we wanted to access. Then we could define the operation that needed access to the protected member as a member of that newly derived class. By doing so, we could override the original class designer's protection strategy. For this reason, protected access is restricted to members of the base-class part of a derived-class object, and does not allow direct access to the members of base-class objects.
+    
+Details:
+    
+    You can circumvent mutual dependencies by using pointers. This avoids infinitely nested objects.  in the case of a pointer (or reference), the compiler does not actually need to know the details of the type until operations are invoked through the pointer (or reference).
