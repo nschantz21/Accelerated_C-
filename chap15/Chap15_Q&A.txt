@@ -32,7 +32,8 @@ Exercises
 
 15-6. The Vec and str classes that we developed in Chapters 11 and 12 are powerful enough to be used to implement Pictures. Reimplement the material in this chapter to use Vec<str> instead of vector<string>, and test your implementation.
 
-    
+    implemented in make file
 
 16-1. Write a self-reproducing program. Such a program is one that does no input, and that, when run, writes a copy of its own source text on the standard output stream.
 
+    

@@ -14,6 +14,7 @@ LFLAGS = -Wall $(DEBUG)
 
 all: my_program
 
+
 my_program: $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o my_program
 

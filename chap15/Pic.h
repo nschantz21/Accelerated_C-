@@ -1,10 +1,10 @@
 #ifndef GUARD_Pic_h
 #define GUARD_Pic_h
-#include<vector>
-#include<string>
 #include<algorithm>
 #include<iostream>
 #include "Ptr.h"
+#include "Str.h"
+#include "Vec.h"
 
 /*
 The Pic_base class
@@ -20,8 +20,8 @@ class Pic_base {
     friend class String_Pic;
     friend class Picture;
     // no public interface - all interface through derived classes or Picture
-    typedef std::vector<std::string>::size_type ht_sz;
-    typedef std::string::size_type wd_sz;
+    typedef Vec<Str>::size_type ht_sz;
+    typedef Str::size_type wd_sz;
     
     // this class is an abstract base class
     virtual wd_sz width() const = 0;
@@ -37,6 +37,9 @@ class Pic_base {
                 ++beg;
             }
         }
+    
+    public:
+        virtual ~Pic_base() {}
 }; // don't forget this dumb semi-colon
 
 class Picture {
@@ -47,7 +50,7 @@ class Picture {
     friend Picture vcat(const Picture&, const Picture&);
     
     public:
-        Picture(const std::vector<std::string>& = std::vector<std::string>());
+        Picture(const Vec<Str>& = Vec<Str>());
         void reframe(char c, char t_b, char s) { p->reframe(c, t_b, s); }
     private:
         Picture(Pic_base* ptr): p(ptr) {}
@@ -63,8 +66,8 @@ std::ostream& operator<<(std::ostream&, const Picture&);
 
 class String_Pic: public Pic_base {
     friend class Picture;
-    std::vector<std::string> data; // copy of user's string
-    String_Pic(const std::vector<std::string>& v): data(v) {}
+    Vec<Str> data; // copy of user's string
+    String_Pic(const Vec<Str>& v): data(v) {}
     
     wd_sz width() const;
     ht_sz height() const {return data.size();}

@@ -1,9 +1,8 @@
-#include <vector>
-#include <string>
 #include <iostream>
 #include "Pic.h"
+#include "Vec.h"
+#include "Str.h"
 
-using std::vector; using std::string;
 using std::endl; using std::cin; using std::cout;
 
 int median_test(int x){
@@ -14,9 +13,9 @@ int median_test(int x){
 }
 
 int main() {
-    vector<string> my_vec;
+    Vec<Str> my_vec;
     while(cin){
-        string st;
+        Str st;
         getline(cin, st);
         my_vec.push_back(st);
     }

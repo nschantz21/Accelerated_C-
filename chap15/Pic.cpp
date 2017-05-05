@@ -3,6 +3,8 @@
 #include<algorithm>
 #include<iostream>
 #include "Pic.h"
+#include "Vec.h"
+#include "Str.h"
 
 
 Picture frame(const Picture& pic) {
@@ -19,7 +21,7 @@ Picture vcat(const Picture& t, const Picture& b){
 }
 
 // construct a Picture from a vector<string>
-Picture::Picture(const std::vector<std::string>& v): p(new String_Pic(v)) {}
+Picture::Picture(const Vec<Str>& v): p(new String_Pic(v)) {}
 
 std::ostream& operator<<(std::ostream& os, const Picture& picture){
     const Pic_base::ht_sz ht = picture.p->height();
@@ -93,7 +95,7 @@ void Frame_Pic::display(std::ostream& os, ht_sz row, bool do_pad) const {
             // top or bottom row
             // write the border
             os << corner;
-            os << std::string(width() - 2, top_bottom);
+            os << Str(width() - 2, top_bottom);
             os << corner;
         } else if (row == 1 || row == height() - 2) {
             // second from top or bottom row
