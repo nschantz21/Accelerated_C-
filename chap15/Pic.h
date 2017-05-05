@@ -5,6 +5,7 @@
 #include<algorithm>
 #include<iostream>
 #include "Ptr.h"
+
 /*
 The Pic_base class
 */
