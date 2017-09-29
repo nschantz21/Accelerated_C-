@@ -11,7 +11,7 @@ Chap 12 exercises
 12-2. Implement the c_str, data, and copy functions.
 
     A:  see ./02/Str.h these are member functions of the std::string and are equivalenvt. http://en.cppreference.com/w/cpp/string/basic_string/c_str - Returns a pointer to a null-terminated character array with data equivalent to those stored in the string.  The copy member function pretty much just calls to the std::copy function.
-    
+
 12-3. Define the relational operators for Str . In doing so, you will want to know that the <cstring> header defines a function called strcmp , which compares two character pointers. The function returns a negative integer if the null-terminated character array denoted by the first pointer is less than the second, zero if the two strings are equal, or a positive value if the first string is greater than the second.
 
     A:  see./03/Str.h... they all had to be member functions.  uses strcmp() function.  Also added begin member function to Str class- it calls the Vec member function begin().
@@ -41,7 +41,7 @@ Chap 12 exercises
 
     A:  added std::ostream_iterator<char> to Str.h operator>> .  Didn't ask for istream_iterator because it wouldn't really improve efficiency.  it might not copy the null pointer.  It porbably isn't defined for a Str object either.  I'm not sure if I could just use the <char> template.
     
-12-10. Having seen in §12.1/212 how Str defined a constructor that takes a pair of iterators, we can imagine that such a constructor would be useful in class Vec . Add this constructor to Vec , and reimplement Str to use the Vec constructor instead of calling copy
+12-10. Having seen in §12.1/212 how Str defined a constructor that takes a pair of iterators, we can imagine that such a constructor would be useful in class Vec. Add this constructor to Vec , and reimplement Str to use the Vec constructor instead of calling copy
 
     A:  see./10/Str.h and Vec.h  I invoked the create function(which takes iterators) in the Vec class and then just referenced that function in the Str class.
     

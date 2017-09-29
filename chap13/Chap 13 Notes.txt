@@ -1,0 +1,68 @@
+Chapter 13 : Using Inheritance and dynamic binding.
+
+13.1 Inheritance:
+    The basic idea is that we can often think of one class (derived) as being just like another (base), except for some extensions.  Core is the base class; Grad is the derived class.  Because Grad inherits from Core , every member of Core is also a member of Grad —except for the constructors, the assignment operator, and destructor.  The derived class can add members of its own, and redefine members from the base class.  The derived class cannot delete any of the base class' members.  Using public:Base in the declaration of a derived class, before the body, states the fact that the derived class inherits part of its interface (how you interact with the class), rather than part of the implementation (how the class is written).
+    
+13.1.1 Protection revisted:
+    The protected label gives derived classes, such as Grad , access to the protected members of their constituent base-class objects, but keeps these elements inaccessible to users of the classes.  The derived can only access private members of the Base through public member functions of the Base as well. Can it access private members through protected functions? - yes it can.
+    
+13.1.2 Operations:
+    We can refer to elements from the base class without any special notation in the derived class member functions, because these elements are also members of the derived class.  You will have to use the scope operator on functions redefined by the derived class if you wish to access the orginal base class definition of the function.  
+    
+13.1.3 Inheritance and constructors;
+    The fact that the object is of a derived type adds an extra step to the construction process in order to construct the base-class part of the object.
+    Derived objects are constructed by:
+        Allocating space for the entire object (base-class members as well as derived members); Calling the base-class constructor to initialize the base-class part(s) of the object; Initializing the members of the derived class as directed by the constructor initializer; Executing the body of the derived-class constructor, if any
+        The only new part is how we select which base-class constructor to run. In the derived class we specify which bass class constructors we want, followed by a (possibly empty) list of arguments.  If no base-class constructor is specified, then default base-class constructor is used to build the base-class part of the object.
+        
+13.2 Polymorphism and virtual functions:
+    We can pass derived classes to functions that require a Base class argument because the derived class has a Base class part.  We can bind the function's reference parameters to the Base portions of the Derived object.  Works with pointers and objects as well, not just references.
+    
+13.2.1 Obtaining a value without knowing the object's type:
+    If we want the system to run the right function based on the actual type of the objects passed to the function, which is known only at run time, then we use Virtual functions.  When we declare a member function as virtual the non-member function will determine which member function to run by inspecting each object that we passed as an argument.  The virtual keyword may be used only inside the class definition. If the functions are defined separately from their declarations, we do not repeat virtual in the definitions. The fact that a function is virtual is inherited, so we need not repeat the virtual designation on the declaration in the Derived class.
+    
+13.2.2 Dynamic Binding:
+    This run-time selection of the virtual function to execute is relevant only when the function is called through a reference or a pointer. If we call a virtual function on behalf of an object (as opposed to through a reference or pointer), then we know the exact type of the object at compile time.  However a reference or pointer to a Base-class object may refer or point ot a base-class object or a base-class object of a type derived from the base class - the type of the reference or pointer and the type of object to which the ref or pointer is bound may differ at run-time - that's when virtual functions make a difference.  If you pass a Derived object to a function asking for a Base as it's argument, the Derived object will be cut down to it's Base elements.  Any member functions called in the external function would be statically bound (bound at compile time) to the base class member function, even if they are redefined by the derived class.  If a we call a virtual function on behalf of an object, it is statically bound.  If we call it through a pointer or reference then it is dynamically bound - bound at runtime.
+        
+        Polymorphism refers to the ability of one type to stand in for many types. C++ supports polymorphism through the dynamic-binding properties of virtual functions. When we call a virtual through a pointer or reference, we make a polymorphic call. The type of the reference (or pointer) is fixed, but the type of the object to which it refers (or points) can be the type of the reference (or pointer) or any type derived from it. Thus, we can potentially call one of many functions through a single type.
+        Virtual functions always need to be defined even if not called.
+
+13.2.3 Recap:
+    nothing to add
+
+13.3 Using Inheritance to solve our problem
+    In order to write a single version of a program for mulitple types, we will have to eliminate type dependencies.  The remaining code must be type independent or call invariant between types (such as an inherited member).
+
+13.3.1 Containers of (Virtually) unkown type
+    In order to invoke the dynamic behavior that we need, we use pointers or references instead of objects.  It makes everything a lot more complicated though.  Requires the user to actively manage space.  Once we know what kind of object we need, we allocate an object of the appropriate type, and use that object in our function.  Remember to return to implementation the space that the object consumed, by calling delete on the pointer.
+        
+        Cannot use an overloaded function name as a template argument.  
+
+13.3.2 Virtual destructors
+    In order to have a virtual destructor, the class must have a destructor, which we can then make virtual.  Empty, virtual destructors are not uncommon. A virtual destructor is needed any time it is possible that an object of derived type is destroyed through a pointer to base. If there is no other reason for the destructor to be defined, then that destructor has no work to do and should be empty.
+
+13.4 A simple handle class
+    The use of pointers and references that allows us to use the dynamic-binding also creates a lot of book-keeping - the user has to remember to allocate and delete memory.  The Handle class doesn't eliminate the bookkeeping, but hides it away from the user by encapsulating the pointers to the base class.  The handle class can represent either the Base or the Derived, acting like a pointer.  users of the Handle class don't have to worry about the memory allocation of the Base or Derived.  The Handle class will take care of it for us.
+
+    Static member functions differ from ordinary member functions in that they do not operate on an object of the class type. Unlike other member functions, they are associated with the class, not with a particular object. As such, they cannot access the non static data members of objects of the class: There is no object associated with the function, so there are no members to use.
+
+13.4.1 Reading the Handle
+    the read function has to free the object, decide the kind of object to be read, and allocate the right kind of object. We do not need to check whether cp is 0 before calling delete , because the language guarantees that it is harmless to delete a pointer with value 0
+
+13.4.2 Copying Handle Objects
+    we will want to allocate a new object and initialize it with the values from the object from which we are copying.  we have to make a virtual function that creates a new object that holds copies of the values in the original.  Naming a class as a friend has the same effect as making all of the members of that class friends - all member functions of the friend may access all the private and protected members of the original class.  Ordinarily, when a derived class redefines a function from the base class, it does so exactly: the parameter list and the return type are identical. However, if the base-class function returns a pointer (or reference) to a base class, then the derived-class function can return a pointer (or reference) to a corresponding derived class.  it is perfectly legitimate to copy or assign an unbound handle.
+
+13.5 Using the Handle class
+    nothing to add. see ./main_Stu.cpp
+    
+13.6 Subtlties
+    associated subtleties with iheritance and dynamic binding that often cause trouble
+
+13.6.1 Inheritance and containers
+    There is no virtual -like mechanism that determines what kind of object is needed and allocates enough space to hold that object.  when using a container specific to the base class type, you can add a derived type object using a function that takes a pointer or reference (like push_back()); however, only the inherited Base class portion of the derived class will be added to the container, effectively making copy of a base class type object.
+
+13.6.2 Which Function do you want?
+    when a base- and derived -class function have the same name, but they don't match exactly in number and types of parameters, they behave as if they were completely unrelated functions.  You can use a base class inherited member funtion as a derived class member function, even if you redefined the function, but you have to call it with the base class as the scope.
+
+13.7 Details
+    just look at the book for this

@@ -20,7 +20,7 @@ Chap 14: Managing memory (almost) Automatically
         We can copy a Handle object.
         We can test a Handle object to determine whether it is bound to another object.
         We can use a Handle to trigger polymorphic behavior when it points to an object of a class that belongs to an inheritance hierarchy - if we call a virtual function through our class, we want the implementation to choose the function to run dynamically, just as if we'd called the function through a real pointer.
-    
+
     defining operator->() and operator*() results in dynamic binding because we are calling virtual member functions of the underlying object through pointers and refernces without having to qualify the member function with the class scope.
 
 14.1.2 Using a generic handle
